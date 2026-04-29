@@ -73,11 +73,7 @@ AeroDynamic/
 2. **Second mention** (i.e., reading a new source, you recognize an idea/actor that some earlier 摘要 already mentioned): **now** create the 概念 / 实体 page, link both 摘要 pages as `sources:`, and add the bidirectional links.
 3. **Active back-scan**: when ingesting, always scan existing 摘要 pages for overlap with the new source. Overlap is the trigger.
 
-### Why this matters
-
-Without this rule, every ingest spawns 5-10 wiki pages and the wiki bloats faster than the raw collection — the opposite of distillation. The wiki should always be **smaller in page count than raw**, but **richer in connections**.
-
-When in doubt, **wait**. A concept that only appears in one source can live perfectly well as a paragraph inside that 摘要 page until a second source justifies promoting it.
+> This rule pairs with the Ingest workflow in §8.1 (especially step 4). When in doubt, **wait**: a concept that only appears in one source can live as a paragraph inside that 摘要 page until a second source justifies promoting it.
 
 ---
 
@@ -221,7 +217,7 @@ When the user drops a new source into `raw/<medium>/`:
 8. **Update `index.md`** — add the new wiki pages to the appropriate sections.
 9. **Append to `log.md`** with the `ingest` entry format (§10).
 
-A single ingest typically touches **1 摘要 + 0-3 wiki pages**. If you find yourself creating 5+ new pages from a single source, you are violating §3 — stop and reconsider.
+A single ingest can easily touch 10-15 wiki pages — that's normal.
 
 ### 8.2 Query
 
@@ -338,7 +334,7 @@ This rule overrides the fact that this CLAUDE.md is in English. The English sche
 
 ---
 
-## 13. Quick Reference
+### Quick Reference
 
 ```bash
 # Last 5 log entries
@@ -351,4 +347,6 @@ find wiki -name "*.md" | wc -l
 # — ask Claude to run a lint pass instead of grepping by hand
 ```
 
-v1.1
+---
+
+v1.2
