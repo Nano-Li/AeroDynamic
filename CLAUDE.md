@@ -33,6 +33,7 @@ AeroDynamic/
 │   ├── 论文/            # academic papers (PDF, arXiv)
 │   ├── 媒体/            # video / audio / podcast (with transcripts)
 │   ├── 网页/            # web clippings (markdown via Web Clipper)
+│   ├── 笔记/            # user notes
 │   └── assets/         # images and attachments referenced by raw or wiki
 │
 └── wiki/               # your distilled, interlinked knowledge
@@ -58,14 +59,14 @@ AeroDynamic/
 
 ### Trigger conditions
 
-| Page type | When to create |
-|---|---|
-| **摘要** | **Always** — every paper / book / media / quality web source gets one on ingest. Unconditional. |
-| **概念** | The same idea (principle / method / term) has appeared in **≥2 distinct raw sources** |
-| **实体** | The same actor (person / company / product / model) is mentioned in **≥2 distinct raw sources** |
-| **对比** | The comparison topic has appeared in **≥2 sources** with differing positions, data, or angles |
-| **主题** | A meaningful cluster has formed: at least **3 related 概念 or 实体 pages** exist that need an MOC hub to navigate them |
-| **问答** | **Only when the user explicitly asks to file the conversation.** Never auto-create. |
+| Page type | When to create                                                                                                                                     |
+| --------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **摘要**    | **Always** — every paper / book / media / quality web source gets one on ingest. Unconditional.                                                    |
+| **概念**    | The same idea (principle / method / term) has appeared in **≥3 distinct raw sources**                                                              |
+| **实体**    | The same actor (person / company / product / model) is mentioned in **≥3 distinct raw sources**                                                    |
+| **对比**    | The comparison topic has appeared in **≥2 sources** with **显式对比** (differing positions, data, or angles explicitly made by the sources themselves) |
+| **主题**    | A meaningful cluster has formed: at least **5 related 概念 or 实体 pages** exist that need an MOC hub to navigate them                                 |
+| **问答**    | **Only when the user explicitly asks to file the conversation.** Never auto-create.                                                                |
 
 ### Workflow when reading a new source
 
@@ -102,7 +103,7 @@ sources: ["[[摘要/Attention Is All You Need]]"]
 ```yaml
 ---
 type: summary
-medium: paper            # paper | book | media | web
+medium: paper            # paper | thesis | book | media | web | note
 title: "Attention Is All You Need"
 authors: [Vaswani et al.]
 year: 2017
@@ -151,6 +152,12 @@ topics: [transformer, attention]
 **简记**：用纯自注意力替代 RNN/CNN，实现可并行的序列建模，奠定 Transformer 架构。
 ```
 
+### 5.1.1 学位论文 → 摘要
+
+A paper subtype. Follow the §5.1 skeleton with two changes:
+- Replace `简记` with `摘要`
+- Content: 1-2 sentences on the experimental apparatus + 1-2 sentences on each major contribution
+
 ### 5.2 书籍 → Full Summary
 
 Books carry richer structure than a single paper. Write ~300 Chinese characters covering: core thesis + chapter spine + the 3-5 most important takeaways. Link to relevant 概念 / 实体 pages.
@@ -164,6 +171,10 @@ Books carry richer structure than a single paper. Write ~300 Chinese characters 
 Use judgment by quality:
 - High-quality long-form essay / authoritative documentation → full summary (~150 chars)
 - Short blog post, news, casual content → 简记 (one or two sentences)
+
+### 5.5 笔记 (user notes) → Brief Note
+
+1-2 Chinese sentences summarizing the 笔记 content.
 
 ---
 
@@ -207,13 +218,15 @@ When the user drops a new source into `raw/<medium>/`:
 2. **Discuss** the key takeaways with the user briefly (2-4 bullets) before writing anything.
 3. **Create a 摘要 page** under `wiki/摘要/` (always — unconditional, per §3):
    - Paper → 简记 only (per §5.1)
+   - Thesis → 摘要 (per §5.1.1)
    - Book / media / high-quality web → full summary (per §5.2-5.4)
-4. **Back-scan existing 摘要 pages** for overlap with this new source. For each idea/actor mentioned in the new source:
+   - Note → brief note (per §5.5)
+1. **Back-scan existing 摘要 pages** for overlap with this new source. For each idea/actor mentioned in the new source:
    - If **another 摘要 already mentions it** → the §3 trigger fires: create the 概念 / 实体 page now, with both 摘要 pages listed in `sources:`.
    - If **no prior 摘要 mentions it** → list it inline in the new 摘要 page only. Do not create a standalone page.
 5. **Update existing 概念 / 实体 / 主题 pages** that gain new info from this source — append, cite the new 摘要, and bump `updated:`.
 6. **Flag contradictions**: if the new source disagrees with existing wiki claims, mark with a `> [!warning]` callout on the affected page.
-7. **Check 主题 trigger**: if the new 概念 / 实体 pages bring some cluster to ≥3 related pages, propose a 主题 MOC page to the user (do not auto-create; ask first).
+7. **Check 主题 trigger**: if the new 概念 / 实体 pages bring some cluster to ≥5 related pages, propose a 主题 MOC page to the user (do not auto-create; ask first).
 8. **Update `index.md`** — add the new wiki pages to the appropriate sections.
 9. **Append to `log.md`** with the `ingest` entry format (§10).
 
@@ -349,4 +362,4 @@ find wiki -name "*.md" | wc -l
 
 ---
 
-v1.2
+v1.3
